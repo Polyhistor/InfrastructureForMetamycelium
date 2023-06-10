@@ -16,7 +16,10 @@ determineOsPackageManager(){
     do
         if [[ -f $f ]];then
             packageManagerInstallCommand=${osInfo[$f]} # reassignment
+            echo -e "${bold}${green}Package manager found and set.${reset}"
+            break
         fi
     done
 }
 
+determineOsPackageManager
