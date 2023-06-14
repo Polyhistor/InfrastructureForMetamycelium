@@ -21,16 +21,8 @@ provider "helm" {
 resource "helm_release" "mm_kubernetes_ingress" {
   name       = "mm"
   repository = "https://polyhistor.github.io/helmChartsRepoForMetamycelium/kubernetes_ingress"
-  chart      = "kubernetes_ingress"
-  version    = "0.1.0"
+  chart      = "kubernetes-ingress"
+  version    = "0.2.0"
 
-  values = [
-    <<EOF
-serviceAccount:
-  create: false
-  name: mmServiceAccount
-EOF
-    // Specify any additional values or overrides for the Helm chart
-  ]
 }
 
