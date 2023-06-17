@@ -33,4 +33,6 @@ resource "helm_release" "keycloak" {
   name       = "keycloak"
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "keycloak"
+  version    = "15.1.3"
+
 }
