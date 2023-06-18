@@ -4,6 +4,11 @@ terraform {
       source  = "hashicorp/helm"
       version = ">= 2.0.0"
     }
+    keycloak = {
+      source  = "mrparkers/keycloak"
+      version = ">= 4.0.0"
+    }
+
   }
 }
 
@@ -12,3 +17,4 @@ provider "helm" {
     config_path = "~/.kube/config" # Path to your kubeconfig file
   }
 }
+

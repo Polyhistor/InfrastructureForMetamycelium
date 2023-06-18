@@ -28,11 +28,18 @@ resource "helm_release" "vault" {
   }
 }
 
-
 resource "helm_release" "keycloak" {
   name       = "keycloak"
   repository = "https://charts.bitnami.com/bitnami"
   chart      = "keycloak"
-  version    = "15.1.3"
 
+  set {
+    name  = "auth.adminUser"
+    value = "admin"
+  }
+
+  set {
+    name  = "auth.adminPassword"
+    value = "password"
+  }
 }
