@@ -30,16 +30,32 @@ resource "helm_release" "vault" {
 
 resource "helm_release" "keycloak" {
   name       = "keycloak"
-  repository = "https://charts.bitnami.com/bitnami"
+  repository = "https://codecentric.github.io/helm-charts"
   chart      = "keycloak"
+  version    = "18.4.3" # specify the version here
 
   set {
-    name  = "auth.adminUser"
-    value = "admin"
+    name  = "keycloak.username"
+    value = "keycloak"
   }
 
   set {
-    name  = "auth.adminPassword"
+    name  = "keycloak.password"
     value = "password"
+  }
+
+  set {
+    name  = "postgresql.postgresqlPassword"
+    value = "password"
+  }
+
+  set {
+    name  = "postgresql.postgresqlUsername"
+    value = "bn_keycloak"
+  }
+
+  set {
+    name  = "postgresql.postgresqlDatabase"
+    value = "keycloak"
   }
 }
