@@ -27,35 +27,40 @@ resource "helm_release" "vault" {
     value = "true"
   }
 }
-
 resource "helm_release" "keycloak" {
   name       = "keycloak"
-  repository = "https://codecentric.github.io/helm-charts"
+  repository = "https://charts.bitnami.com/bitnami"
   chart      = "keycloak"
-  version    = "18.4.3" # specify the version here
-
   set {
-    name  = "keycloak.username"
-    value = "keycloak"
+    name  = "postgresql.auth.postgresPassword"
+    value = "mysecretpassword" # Updated password value
   }
 
   set {
-    name  = "keycloak.password"
-    value = "password"
+    name  = "postgresql.auth.username"
+    value = "pouya"
   }
 
   set {
-    name  = "postgresql.postgresqlPassword"
-    value = "password"
-  }
-
-  set {
-    name  = "postgresql.postgresqlUsername"
-    value = "bn_keycloak"
+    name  = "postgresql.auth.password"
+    value = "authpassword"
   }
 
   set {
     name  = "postgresql.postgresqlDatabase"
-    value = "keycloak"
+    value = "bitnami_keycloak" # If necessary, update the database name
+  }
+
+  set {
+    name  = "postgresql.postgresqlPassword"
+    value = "mysecretpassword" # Same as the new password value
+  }
+
+  set {
+    name  = "postgresql.postgresqlUsername"
+    value = "pouya" # Same as the username
   }
 }
+
+
+
