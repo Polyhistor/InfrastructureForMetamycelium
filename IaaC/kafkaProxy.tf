@@ -59,3 +59,5 @@ resource "kubernetes_service" "kafka_rest_proxy" {
     }
   }
 }
+
+
