@@ -6,6 +6,13 @@
 #   wait       = false
 # }
 
+resource "helm_release" "nginx_ingress" {
+  name       = "nginx-ingress"
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
+}
+
+
 resource "helm_release" "mm_kafka" {
   name       = "mm-kafka"
   repository = "https://charts.bitnami.com/bitnami"
