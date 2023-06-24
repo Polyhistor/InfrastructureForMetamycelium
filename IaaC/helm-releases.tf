@@ -1,10 +1,10 @@
-resource "helm_release" "mm_kubernetes_ingress" {
-  name       = "mm-ingress-helm-release"
-  repository = "https://kubernetes.github.io/ingress-nginx"
-  chart      = "ingress-nginx"
-  version    = "4.7.0" # ensure you use the correct version here
-  wait       = false
-}
+# resource "helm_release" "mm_kubernetes_ingress" {
+#   name       = "mm-ingress-helm-release"
+#   repository = "https://kubernetes.github.io/ingress-nginx"
+#   chart      = "ingress-nginx"
+#   version    = "4.7.0" # ensure you use the correct version here
+#   wait       = false
+# }
 
 resource "helm_release" "mm_kafka" {
   name       = "mm-kafka"
