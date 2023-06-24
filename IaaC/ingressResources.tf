@@ -17,6 +17,18 @@ resource "kubernetes_ingress_v1" "kafka_rest_proxy_ingress" {
             }
           }
         }
+
+        path {
+          path = "/keycloak"
+          backend {
+            service {
+              name = "keycloak"
+              port {
+                number = 80
+              }
+            }
+          }
+        }
       }
     }
   }
