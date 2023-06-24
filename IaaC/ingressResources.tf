@@ -7,7 +7,7 @@ resource "kubernetes_ingress_v1" "kafka_rest_proxy_ingress" {
     rule {
       http {
         path {
-          path = "/"
+          path = "/kafka-rest-proxy"
           backend {
             service {
               name = "kafka-rest-proxy" # reference the service you've declared
