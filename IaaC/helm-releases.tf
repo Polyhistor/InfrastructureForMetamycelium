@@ -80,15 +80,7 @@ resource "helm_release" "keycloak" {
     value = "pouya" # Same as the username
   }
 
-  set {
-    name  = "env.KEYCLOAK_FRONTEND_URL"
-    value = "http://localhost/keycloak"
-  }
 
-  set {
-    name  = "env.PROXY_ADDRESS_FORWARDING"
-    value = "true"
-  }
 }
 
 # resource "helm_release" "node_temeletry_processor" {
