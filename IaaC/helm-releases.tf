@@ -23,7 +23,6 @@ resource "helm_release" "nginx_ingress" {
 
 }
 
-
 resource "helm_release" "mm_kafka" {
   name       = "mm-kafka"
   repository = "https://charts.bitnami.com/bitnami"
