@@ -1,5 +1,3 @@
-
-
 resource "kubernetes_service" "keycloak" {
   metadata {
     name = "keycloak"
@@ -15,11 +13,13 @@ resource "kubernetes_service" "keycloak" {
       name        = "http"
       port        = 8080
       target_port = 8080
+      node_port   = 30080 # Choose an available port in the NodePort range (30000-32767)
     }
 
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
+
 
 resource "kubernetes_deployment" "keycloak" {
   metadata {
