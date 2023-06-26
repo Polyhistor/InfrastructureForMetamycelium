@@ -1,36 +1,28 @@
 resource "kubernetes_ingress_v1" "kafka_rest_proxy_ingress" {
   metadata {
-    name = "kafka-rest-proxy-ingress"
+    # name = "kafka-rest-proxy-ingress"
     # annotations = {
-    #   "nginx.ingress.kubernetes.io/rewrite-target" = "/"
+    #   "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
     # }
   }
   spec {
     ingress_class_name = "nginx"
+
     rule {
+      host = "keycloak.127.0.0.1.nip.io"
       http {
         path {
-          path = "/kafka-rest-proxy"
+          path      = "/"
+          path_type = "Prefix"
           backend {
             service {
-              name = "kafka-rest-proxy"
+              name = "keycloak"
               port {
-                number = 8082
+                number = 8080
               }
             }
           }
         }
-        # path {
-        #   path = "/keycloak(/|$)(.*)"
-        #   backend {
-        #     service {
-        #       name = "keycloak"
-        #       port {
-        #         number = 80
-        #       }
-        #     }
-        #   }
-        # }
       }
     }
   }
