@@ -62,6 +62,16 @@ resource "kubernetes_deployment" "keycloak" {
           }
 
           env {
+            name  = "PROXY_ADDRESS_FORWARDING"
+            value = "true"
+          }
+
+          env {
+            name  = "KC_HOSTNAME"
+            value = "/keycloak"
+          }
+
+          env {
             name  = "KC_PROXY"
             value = "edge"
           }

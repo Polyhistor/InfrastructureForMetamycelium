@@ -8,8 +8,8 @@ resource "kubernetes_ingress_v1" "kafka_rest_proxy_ingress" {
   spec {
     ingress_class_name = "nginx"
     rule {
-      host = "localhost"
       http {
+
         path {
           path = "/"
           backend {
@@ -22,19 +22,17 @@ resource "kubernetes_ingress_v1" "kafka_rest_proxy_ingress" {
           }
         }
 
-
-        # path {
-        #   path      = "/kafka-rest-proxy"
-        #   path_type = "Prefix"
-        #   backend {
-        #     service {
-        #       name = "kafka-rest-proxy"
-        #       port {
-        #         number = 8080
-        #       }
-        #     }
-        #   }
-        # }
+        path {
+          path = "/keycloak"
+          backend {
+            service {
+              name = "keycloak"
+              port {
+                number = 8080
+              }
+            }
+          }
+        }
 
       }
     }
