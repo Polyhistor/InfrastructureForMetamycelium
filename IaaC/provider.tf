@@ -21,5 +21,5 @@ provider "helm" {
 
 provider "kubernetes" {
   config_path    = "~/.kube/config"
-  config_context = "kind-mm-local-cluster"
+  config_context = "kind-mm-kubernetes-instance"
 }
