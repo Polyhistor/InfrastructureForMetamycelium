@@ -8,7 +8,7 @@ resource "kubernetes_ingress_v1" "kafka_rest_proxy_ingress" {
   spec {
     ingress_class_name = "nginx"
     rule {
-      # host = "localhost"
+      host = "localhost"
       http {
         path {
           path = "/"
