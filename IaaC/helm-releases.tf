@@ -17,6 +17,11 @@ resource "helm_release" "nginx_ingress" {
   }
 
   set {
+    name  = "controller.service.nodePorts.http"
+    value = "31293"
+  }
+
+  set {
     name  = "controller.hostNetwork"
     value = "true"
   }
