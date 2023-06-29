@@ -66,14 +66,19 @@ resource "kubernetes_deployment" "keycloak" {
             value = "true"
           }
 
-          env {
-            name  = "KC_HOSTNAME"
-            value = "/keycloak"
-          }
+          # env {
+          #   name  = "KC_HOSTNAME"
+          #   value = "localhost"
+          # }
+
+          # env {
+          #   name  = "KC_PROXY"
+          #   value = "edge"
+          # }
 
           env {
-            name  = "KC_PROXY"
-            value = "edge"
+            name  = "KEYCLOAK_FRONTEND_URL"
+            value = "http://localhost:8080/auth"
           }
 
           port {
