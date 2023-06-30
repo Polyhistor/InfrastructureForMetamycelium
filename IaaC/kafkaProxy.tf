@@ -32,7 +32,7 @@ resource "kubernetes_deployment" "kafka_rest_proxy" {
           }
           env {
             name  = "KAFKA_REST_BOOTSTRAP_SERVERS"
-            value = "PLAINTEXT://mm-kafka.default.svc.cluster.local:9092" # Replace with your Kafka service address
+            value = "PLAINTEXT://mm-kafka.default.svc.cluster.local:9092"
           }
           env {
             name  = "KAFKA_REST_LISTENERS"
