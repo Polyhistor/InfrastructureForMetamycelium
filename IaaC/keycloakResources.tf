@@ -13,10 +13,8 @@ resource "kubernetes_service" "keycloak" {
       name        = "http"
       port        = 8080
       target_port = 8080
-      node_port   = 30080 # Choose an available port in the NodePort range (30000-32767)
     }
 
-    type = "NodePort"
   }
 }
 
@@ -62,24 +60,16 @@ resource "kubernetes_deployment" "keycloak" {
           }
 
           env {
-            name  = "PROXY_ADDRESS_FORWARDING"
-            value = "true"
+            name  = "KC_HTTP_RELATIVE_PATH"
+            value = "/keycloak"
           }
 
-          # env {
-          #   name  = "KC_HOSTNAME"
-          #   value = "localhost"
-          # }
-
-          # env {
-          #   name  = "KC_PROXY"
-          #   value = "edge"
-          # }
 
           env {
-            name  = "KEYCLOAK_FRONTEND_URL"
-            value = "http://localhost:8080/auth"
+            name  = "KC_PROXY"
+            value = "passthrough"
           }
+
 
           port {
             name           = "http"
