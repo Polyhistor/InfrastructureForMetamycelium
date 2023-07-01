@@ -1,24 +1,12 @@
-resource "kubernetes_ingress_v1" "kafka_rest_proxy_ingress" {
+resource "kubernetes_ingress_v1" "keycloak_ingress" {
   metadata {
-    name = "kafka-rest-proxy-ingress"
+    name = "keycloak-ingress"
   }
   spec {
     ingress_class_name = "nginx"
     rule {
       host = "localhost"
       http {
-        path {
-          path = "/"
-          backend {
-            service {
-              name = "kafka-rest-proxy"
-              port {
-                number = 8082
-              }
-            }
-          }
-        }
-
         path {
           path = "/keycloak"
           backend {
