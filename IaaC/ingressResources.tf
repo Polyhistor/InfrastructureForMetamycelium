@@ -8,7 +8,7 @@ resource "kubernetes_ingress_v1" "kafka_rest_proxy_ingress" {
       host = "localhost"
       http {
         path {
-          path = "/kafka-rest-proxy"
+          path = "/"
           backend {
             service {
               name = "kafka-rest-proxy"
