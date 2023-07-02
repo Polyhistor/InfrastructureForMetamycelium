@@ -3,3 +3,4 @@ resource "kubernetes_namespace" "istio_system" {
     name = "istio-system"
   }
 }
+
