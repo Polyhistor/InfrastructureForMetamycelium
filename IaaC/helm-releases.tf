@@ -1,11 +1,3 @@
-# resource "helm_release" "mm_kubernetes_ingress" {
-#   name       = "mm-ingress-helm-release"
-#   repository = "https://kubernetes.github.io/ingress-nginx"
-#   chart      = "ingress-nginx"
-#   version    = "4.7.0" # ensure you use the correct version here
-#   wait       = false
-# }
-
 resource "helm_release" "nginx_ingress" {
   name       = "nginx-ingress"
   repository = "https://kubernetes.github.io/ingress-nginx"
@@ -67,3 +59,28 @@ resource "helm_release" "node_temeletry_processor" {
   repository = "https://polyhistor.github.io/helmChartsRepoForMetamycelium/nodejs-telemetry-processor"
   chart      = "mm-telemetry-processor"
 }
+
+resource "helm_release" "istio_base" {
+  name  = "istio-base"
+  chart = "base"
+
+  repository = "https://istio-release.storage.googleapis.com/charts"
+  namespace  = kubernetes_namespace.istio_system.metadata[0].name
+
+  set {
+    name  = "defaultRevision"
+    value = "default"
+  }
+
+  depends_on = [kubernetes_namespace.istio_system]
+}
+
+resource "helm_release" "istiod" {
+  name  = "istiod"
+  chart = "istiod"
+
+  repository = "https://istio-release.storage.googleapis.com/charts"
+  namespace  = kubernetes_namespace.istio_system.metadata[0].name
+  depends_on = [helm_release.istio_base]
+}
+
