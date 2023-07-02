@@ -34,6 +34,7 @@ resource "helm_release" "mm_kafka" {
   chart      = "kafka"
 }
 
+
 resource "helm_release" "vault" {
   name       = "vault"
   repository = "https://helm.releases.hashicorp.com"
@@ -48,7 +49,18 @@ resource "helm_release" "vault" {
     name  = "ui.enabled"
     value = "true"
   }
+
+  set {
+    name  = "server.ingress.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "server.ingress.hosts[0]"
+    value = "localhost"
+  }
 }
+
 
 resource "helm_release" "node_temeletry_processor" {
   name       = "mm-telemetry-processor"
