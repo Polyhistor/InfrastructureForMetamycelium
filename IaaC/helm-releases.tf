@@ -26,7 +26,6 @@ resource "helm_release" "mm_kafka" {
   chart      = "kafka"
 }
 
-
 resource "helm_release" "vault" {
   name       = "vault"
   repository = "https://helm.releases.hashicorp.com"
@@ -47,16 +46,12 @@ resource "helm_release" "vault" {
     value = "true"
   }
 
-  set {
-    name  = "server.ingress.hosts[0]"
-    value = "localhost"
-  }
-}
 
+}
 
 resource "helm_release" "node_temeletry_processor" {
   name       = "mm-telemetry-processor"
-  repository = "https://polyhistor.github.io/helmChartsRepoForMetamycelium/nodejs-telemetry-processor"
+  repository = "https://polyhistor.github.io/helmChartsRepoForMetamycelium/nodejs-telemetry-processor-chart"
   chart      = "mm-telemetry-processor"
 }
 
