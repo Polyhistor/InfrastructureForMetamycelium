@@ -53,6 +53,7 @@ resource "helm_release" "node_temeletry_processor" {
   name       = "mm-telemetry-processor"
   repository = "https://polyhistor.github.io/helmChartsRepoForMetamycelium/nodejs-telemetry-processor-chart"
   chart      = "mm-telemetry-processor"
+  namespace  = "istio-service-mesh"
 
   values = [
     <<-EOF
