@@ -53,7 +53,15 @@ resource "helm_release" "node_temeletry_processor" {
   name       = "mm-telemetry-processor"
   repository = "https://polyhistor.github.io/helmChartsRepoForMetamycelium/nodejs-telemetry-processor-chart"
   chart      = "mm-telemetry-processor"
+
+  values = [
+    <<-EOF
+    podAnnotations:
+      sidecar.istio.io/inject: "true"
+    EOF
+  ]
 }
+
 
 resource "helm_release" "istio_base" {
   name  = "istio-base"
