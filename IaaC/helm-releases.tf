@@ -88,3 +88,46 @@ resource "helm_release" "istiod" {
   depends_on = [helm_release.istio_base]
 }
 
+
+resource "helm_release" "prometheus" {
+  name       = "prometheus"
+  chart      = "prometheus"
+  repository = "https://prometheus-community.github.io/helm-charts"
+  namespace  = kubernetes_namespace.istio_system.metadata[0].name
+
+  depends_on = [helm_release.istiod]
+}
+
+resource "helm_release" "kiali" {
+  name       = "kiali"
+  chart      = "kiali-server"
+  repository = "https://kiali.org/helm-charts"
+  namespace  = kubernetes_namespace.istio_system.metadata[0].name
+
+  set {
+    name  = "external_services.prometheus.url"
+    value = "http://prometheus-server.${kubernetes_namespace.istio_system.metadata[0].name}.svc.cluster.local:9090"
+  }
+
+  set {
+    name  = "auth.strategy"
+    value = "token"
+  }
+
+  set {
+    name  = "login_token.signing_key"
+    value = "TheJWTSigningKey" # replace with your key
+  }
+
+  set {
+    name  = "login_token.secure.enabled"
+    value = "true"
+  }
+
+  set {
+    name  = "login_token.secure.secret_name"
+    value = kubernetes_secret.kiali_signing_key.metadata[0].name
+  }
+
+  depends_on = [helm_release.prometheus, kubernetes_secret.kiali_signing_key]
+}
