@@ -115,19 +115,9 @@ resource "helm_release" "kiali" {
   }
 
   set {
-    name  = "login_token.signing_key"
-    value = "TheJWTSigningKey" # replace with your key
+    name  = "auth.token.secret_name"
+    value = kubernetes_service_account.kiali.default_secret_name
   }
 
-  set {
-    name  = "login_token.secure.enabled"
-    value = "true"
-  }
-
-  set {
-    name  = "login_token.secure.secret_name"
-    value = kubernetes_secret.kiali_signing_key.metadata[0].name
-  }
-
-  depends_on = [helm_release.prometheus, kubernetes_secret.kiali_signing_key]
+  depends_on = [helm_release.prometheus, kubernetes_service_account.kiali]
 }

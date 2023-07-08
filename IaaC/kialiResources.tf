@@ -1,13 +1,8 @@
-resource "kubernetes_secret" "kiali" {
+resource "kubernetes_service_account" "kiali" {
   metadata {
     name      = "kiali"
     namespace = kubernetes_namespace.istio_system.metadata[0].name
   }
 
-  data = {
-    username   = "YWRtaW4=" # base64 encoded 'admin'
-    passphrase = "YWRtaW4=" # base64 encoded 'admin'
-  }
-
-  type = "Opaque"
+  automount_service_account_token = true
 }
