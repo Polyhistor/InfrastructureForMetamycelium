@@ -106,7 +106,7 @@ resource "helm_release" "kiali" {
 
   set {
     name  = "external_services.prometheus.url"
-    value = "http://prometheus-server.${kubernetes_namespace.istio_system.metadata[0].name}.svc.cluster.local:9090"
+    value = "http://prometheus-server.${kubernetes_namespace.istio_system.metadata[0].name}.svc.cluster.local:80"
   }
 
   set {
