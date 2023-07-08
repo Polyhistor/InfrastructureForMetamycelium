@@ -24,6 +24,21 @@ resource "kubernetes_ingress_v1" "kafka_rest_proxy_ingress" {
             }
           }
         }
+
+        path {
+          path_type = "Prefix"
+          path      = "/kiali(/|$)(.*)"
+
+          backend {
+            service {
+              name = "kiali"
+              port {
+                number = 20001
+              }
+            }
+          }
+        }
+
       }
     }
   }
@@ -31,28 +46,3 @@ resource "kubernetes_ingress_v1" "kafka_rest_proxy_ingress" {
   wait_for_load_balancer = false
 }
 
-resource "kubernetes_ingress_v1" "vault_ui_ingress" {
-  metadata {
-    name = "vault-ui-ingress"
-  }
-
-  spec {
-    ingress_class_name = "nginx"
-    rule {
-      host = "localhost"
-      http {
-        path {
-          path = "/vault/*"
-          backend {
-            service {
-              name = "vault-ui"
-              port {
-                number = 8200
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}

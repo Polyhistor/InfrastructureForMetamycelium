@@ -114,6 +114,11 @@ resource "helm_release" "kiali" {
     value = "anonymous"
   }
 
+  set {
+    name  = "ingress.enabled"
+    value = "false"
+  }
+
   # set {
   #   name  = "auth.token.secret_name"
   #   value = kubernetes_secret.kiali_token.metadata[0].name
@@ -122,3 +127,24 @@ resource "helm_release" "kiali" {
   depends_on = [helm_release.prometheus]
 }
 
+resource "helm_release" "minio" {
+  name       = "minio"
+  chart      = "minio"
+  repository = "https://helm.min.io"
+  namespace  = "default"
+
+  set {
+    name  = "accessKey"
+    value = "minioadmin"
+  }
+
+  set {
+    name  = "secretKey"
+    value = "minioadmin"
+  }
+
+  set {
+    name  = "mode"
+    value = "standalone"
+  }
+}
