@@ -111,13 +111,14 @@ resource "helm_release" "kiali" {
 
   set {
     name  = "auth.strategy"
-    value = "token"
+    value = "anonymous"
   }
 
-  set {
-    name  = "auth.token.secret_name"
-    value = kubernetes_service_account.kiali.default_secret_name
-  }
+  # set {
+  #   name  = "auth.token.secret_name"
+  #   value = kubernetes_secret.kiali_token.metadata[0].name
+  # }
 
-  depends_on = [helm_release.prometheus, kubernetes_service_account.kiali]
+  depends_on = [helm_release.prometheus]
 }
+
