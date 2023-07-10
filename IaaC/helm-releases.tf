@@ -148,3 +148,5 @@ resource "helm_release" "minio" {
     value = "standalone"
   }
 }
+
+
