@@ -9,6 +9,10 @@ terraform {
       version = ">= 4.0.0"
     }
 
+    k8s = {
+      source  = "metio/k8s"
+      version = "2022.11.21"
+    }
   }
 }
 

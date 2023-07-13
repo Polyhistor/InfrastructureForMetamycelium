@@ -40,6 +40,29 @@ provider "registry.terraform.io/hashicorp/kubernetes" {
   ]
 }
 
+provider "registry.terraform.io/metio/k8s" {
+  version     = "2022.11.21"
+  constraints = "2022.11.21"
+  hashes = [
+    "h1:26NR/IathApdlBchqAurma7qLJKKFbBEsFSmH7Gf1rM=",
+    "zh:04fda2bbc1289af26540f4d715f8fd566beda67973e39623341f9db49316ff24",
+    "zh:22d7ca8deaffc455c062406a8de656b8f2d1560638342ed5bd2f3179d6829ad0",
+    "zh:275af95f6dd82efb0d4d4110104f14e2d2d85fef7588bc1f82135f614b820432",
+    "zh:451dee607909159efeb547a820c6fe37dd9a174340129eaa5976289fd2ac2194",
+    "zh:494633ebdc33b1a36d0ab8e79f17df1ead3ebaf3829f4af77880a81927f89ecc",
+    "zh:5ccae4d182bef83a0a51dbfe409e0573d54c801f1b4e181423ad2ccbda24930a",
+    "zh:6302c7e1c8273dc2f70daddbb69168f1de7cd25469689765b89d1a980cb51ea6",
+    "zh:64fecaf54bad2cf0ae4f449f4579565465002e394aff2e41509e37a2701af519",
+    "zh:75609935b1fcd9bd242e872cb512222f7f800828567b5a09caba1c0868c3da30",
+    "zh:9e217e441b6489889b2a7a46c503c2673a1958babc495e2dba8aec761d08c0cd",
+    "zh:abf2fc16262fd487d999da4240143b097ece5bfe17a55fa63d8f2931b3231044",
+    "zh:c6af5e16a3a2a98ce5ab4952977c57a92b48c200aa056d8fd53ab02ca8ec9317",
+    "zh:d904d0ef20834da3e4f7f59c05f46837071bac398d6d5ee7aff2c644e00e7718",
+    "zh:f5b9afef269386a81c6fdb12acf70fe6d87f2797ab5880ada017f3528f5f7828",
+    "zh:f809ab383cca0a5f83072981c64208cbd7fa67e986a86ee02dd2c82333221e32",
+  ]
+}
+
 provider "registry.terraform.io/mrparkers/keycloak" {
   version     = "4.3.1"
   constraints = ">= 4.0.0"
