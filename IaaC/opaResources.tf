@@ -57,8 +57,8 @@ resource "kubernetes_secret" "opa_istio_cert" {
   }
 
   data = {
-    tls.crt = file("${path.module / certificates / tls.cert}")
-    tls.key = file("${path.module / certificates / tls.key}")
+    "tls.crt" = file("${path.module}/tls.cert")
+    "tls.key" = file("${path.module}/tls.key")
   }
 }
 

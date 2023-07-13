@@ -20,5 +20,13 @@ resource "kubernetes_namespace" "istio_service_mesh" {
 }
 
 
+resource "kubernetes_namespace" "opa_istio_service_mesh" {
+  metadata {
+    name = "opa-istio"
+
+  }
+}
+
+
 
 
