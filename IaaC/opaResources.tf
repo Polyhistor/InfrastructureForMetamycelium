@@ -63,4 +63,207 @@ resource "kubernetes_secret" "opa_istio_cert" {
 }
 
 
+resource "kubernetes_config_map" "inject_policy" {
+  metadata {
+    name      = "inject-policy"
+    namespace = "opa-istio"
+  }
 
+  data = {
+    "inject.rego" = <<EOF
+    package istio
+
+    uid := input.request.uid
+
+    inject = {
+      "apiVersion": "admission.k8s.io/v1",
+      "kind": "AdmissionReview",
+      "response": {
+        "allowed": true,
+        "uid": uid,
+        "patchType": "JSONPatch",
+        "patch": base64.encode(json.marshal(patch)),
+      },
+    }
+
+    patch = [{
+      "op": "add",
+      "path": "/spec/containers/-",
+      "value": opa_container,
+    }, {
+      "op": "add",
+      "path": "/spec/volumes/-",
+      "value": opa_config_volume,
+    }, {
+      "op": "add",
+      "path": "/spec/volumes/-",
+      "value": opa_policy_volume,
+    }]
+
+    opa_container = {
+      "image": "openpolicyagent/opa:latest-istio",
+      "name": "opa-istio",
+      "args": [
+        "run",
+        "--server",
+        "--config-file=/config/config.yaml",
+        "--addr=localhost:8181",
+        "--diagnostic-addr=0.0.0.0:8282",
+        "/policy/policy.rego",
+      ],
+      "volumeMounts": [{
+        "mountPath": "/config",
+        "name": "opa-istio-config",
+      }, {
+        "mountPath": "/policy",
+        "name": "opa-policy",
+      }],
+      "readinessProbe": {
+        "httpGet": {
+          "path": "/health?plugins",
+          "port": 8282,
+        },
+      },
+      "livenessProbe": {
+        "httpGet": {
+          "path": "/health?plugins",
+          "port": 8282,
+        },
+      }
+    }
+
+    opa_config_volume = {
+      "name": "opa-istio-config",
+      "configMap": {"name": "opa-istio-config"},
+    }
+
+    opa_policy_volume = {
+      "name": "opa-policy",
+      "configMap": {"name": "opa-policy"},
+    }
+EOF
+  }
+}
+
+
+resource "kubernetes_service" "admission_controller" {
+  metadata {
+    name      = "admission-controller"
+    namespace = "opa-istio"
+
+    labels = {
+      app = "admission-controller"
+    }
+  }
+
+  spec {
+    selector = {
+      app = "admission-controller"
+    }
+
+    port {
+      name        = "https"
+      protocol    = "TCP"
+      port        = 443
+      target_port = 8443
+    }
+
+    type = "ClusterIP"
+  }
+}
+
+
+resource "kubernetes_deployment" "admission_controller" {
+  metadata {
+    name      = "admission-controller"
+    namespace = "opa-istio"
+    labels = {
+      app = "admission-controller"
+    }
+  }
+
+  spec {
+    replicas = 1
+
+    selector {
+      match_labels = {
+        app = "admission-controller"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "admission-controller"
+        }
+      }
+
+      spec {
+        container {
+          image = "openpolicyagent/opa:latest"
+          name  = "opa"
+          port {
+            container_port = 8443
+          }
+
+          args = [
+            "run",
+            "--server",
+            "--tls-cert-file=/certs/tls.crt",
+            "--tls-private-key-file=/certs/tls.key",
+            "--addr=0.0.0.0:8443",
+            "/policies/inject.rego"
+          ]
+
+          liveness_probe {
+            http_get {
+              path   = "/health?plugins"
+              port   = 8443
+              scheme = "HTTPS"
+            }
+            initial_delay_seconds = 5
+            period_seconds        = 5
+          }
+
+          readiness_probe {
+            http_get {
+              path   = "/health?plugins"
+              port   = 8443
+              scheme = "HTTPS"
+            }
+            initial_delay_seconds = 5
+            period_seconds        = 5
+          }
+
+          volume_mount {
+            mount_path = "/certs"
+            name       = "server-cert"
+            read_only  = true
+          }
+
+          volume_mount {
+            mount_path = "/policies"
+            name       = "inject-policy"
+            read_only  = true
+          }
+        }
+
+        volume {
+          name = "inject-policy"
+
+          config_map {
+            name = "inject-policy"
+          }
+        }
+
+        volume {
+          name = "server-cert"
+
+          secret {
+            secret_name = "server-cert"
+          }
+        }
+      }
+    }
+  }
+}
