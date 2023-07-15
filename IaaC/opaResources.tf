@@ -1,5 +1,4 @@
 // This is a filter that is applied to envoy proxy to make external authorizer api use OPA on through grCP ( note target_uri )
-
 resource "k8s_networking_istio_io_envoy_filter_v1alpha3" "minimal" {
   metadata = {
     name      = "ext-authz"
@@ -49,19 +48,17 @@ resource "k8s_networking_istio_io_envoy_filter_v1alpha3" "minimal" {
   }
 }
 
-
-resource "kubernetes_secret" "opa_istio_cert" {
+resource "kubernetes_secret_v1" "opa_istio_cert" {
   metadata {
     name      = "server-cert"
     namespace = "opa-istio"
   }
 
   data = {
-    "tls.crt" = file("${path.module}/tls.cert")
-    "tls.key" = file("${path.module}/tls.key")
+    "tls.crt" = file("${path.module}/certs/cert.pem")
+    "tls.key" = file("${path.module}/certs/key.pem")
   }
 }
-
 
 resource "kubernetes_config_map" "inject_policy" {
   metadata {
@@ -145,7 +142,6 @@ EOF
   }
 }
 
-
 resource "kubernetes_service" "admission_controller" {
   metadata {
     name      = "admission-controller"
@@ -171,7 +167,6 @@ resource "kubernetes_service" "admission_controller" {
     type = "ClusterIP"
   }
 }
-
 
 resource "kubernetes_deployment" "admission_controller" {
   metadata {
@@ -265,5 +260,118 @@ resource "kubernetes_deployment" "admission_controller" {
         }
       }
     }
+  }
+  depends_on = [
+    kubernetes_secret_v1.opa_istio_cert,
+    kubernetes_config_map.inject_policy
+  ]
+}
+
+# resource "kubernetes_mutating_webhook_configuration_v1" "opa_istio_admission_controller" {
+#   metadata {
+#     name = "opa-istio-admission-controller"
+#   }
+
+#   webhook {
+#     name = "opa.terraform.io"
+
+#     admission_review_versions = ["v1", "v1beta1"]
+
+#     client_config {
+#       service {
+#         namespace = "opa-istio"
+#         name      = "admission-controller"
+#       }
+#     }
+
+#     rule {
+#       api_groups   = ["*"]
+#       api_versions = ["*"]
+#       operations   = ["CREATE", "UPDATE"]
+#       resources    = ["*"]
+#       scope        = "Namespaced"
+#     }
+
+#     reinvocation_policy = "IfNeeded"
+#     side_effects        = "None"
+#   }
+
+#   depends_on = [
+#     kubernetes_service.admission_controller
+#   ]
+
+# }
+
+resource "kubernetes_config_map" "opa_istio_config" {
+  metadata {
+    name = "opa-istio-config"
+  }
+
+  data = {
+    "config.yaml" = <<EOF
+    plugins:
+      envoy_ext_authz_grpc:
+        addr: :9191
+        path: istio/authz/allow
+    decision_logs:
+      console: true
+    EOF
+  }
+}
+
+resource "kubernetes_config_map" "opa_policy" {
+  metadata {
+    name = "opa-policy"
+  }
+
+  data = {
+    "policy.rego" = <<EOF
+    package istio.authz
+
+    import input.attributes.request.http as http_request
+    import input.parsed_path
+
+    default allow = false
+
+    allow {
+        parsed_path[0] == "health"
+        http_request.method == "GET"
+    }
+
+    allow {
+        roles_for_user[r]
+        required_roles[r]
+    }
+
+    roles_for_user[r] {
+        r := user_roles[user_name][_]
+    }
+
+    required_roles[r] {
+        perm := role_perms[r][_]
+        perm.method = http_request.method
+        perm.path = http_request.path
+    }
+
+    user_name = parsed {
+        [_, encoded] := split(http_request.headers.authorization, " ")
+        [parsed, _] := split(base64url.decode(encoded), ":")
+    }
+
+    user_roles = {
+        "alice": ["guest"],
+        "bob": ["admin"]
+    }
+
+    role_perms = {
+        "guest": [
+            {"method": "GET",  "path": "/productpage"},
+        ],
+        "admin": [
+            {"method": "GET",  "path": "/productpage"},
+            {"method": "GET",  "path": "/api/v1/products"},
+        ],
+    }
+EOF
   }
 }
