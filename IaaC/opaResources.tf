@@ -267,40 +267,40 @@ resource "kubernetes_deployment" "admission_controller" {
   ]
 }
 
-# resource "kubernetes_mutating_webhook_configuration_v1" "opa_istio_admission_controller" {
-#   metadata {
-#     name = "opa-istio-admission-controller"
-#   }
+resource "kubernetes_mutating_webhook_configuration_v1" "opa_istio_admission_controller" {
+  metadata {
+    name = "opa-istio-admission-controller"
+  }
 
-#   webhook {
-#     name = "opa.terraform.io"
+  webhook {
+    name = "opa.terraform.io"
 
-#     admission_review_versions = ["v1", "v1beta1"]
+    admission_review_versions = ["v1", "v1beta1"]
 
-#     client_config {
-#       service {
-#         namespace = "opa-istio"
-#         name      = "admission-controller"
-#       }
-#     }
+    client_config {
+      service {
+        namespace = "opa-istio"
+        name      = "admission-controller"
+      }
+    }
 
-#     rule {
-#       api_groups   = ["*"]
-#       api_versions = ["*"]
-#       operations   = ["CREATE", "UPDATE"]
-#       resources    = ["*"]
-#       scope        = "Namespaced"
-#     }
+    rule {
+      api_groups   = ["*"]
+      api_versions = ["*"]
+      operations   = ["CREATE", "UPDATE"]
+      resources    = ["*"]
+      scope        = "Namespaced"
+    }
 
-#     reinvocation_policy = "IfNeeded"
-#     side_effects        = "None"
-#   }
+    reinvocation_policy = "IfNeeded"
+    side_effects        = "None"
+  }
 
-#   depends_on = [
-#     kubernetes_service.admission_controller
-#   ]
+  depends_on = [
+    kubernetes_service.admission_controller
+  ]
 
-# }
+}
 
 resource "kubernetes_config_map" "opa_istio_config" {
   metadata {
