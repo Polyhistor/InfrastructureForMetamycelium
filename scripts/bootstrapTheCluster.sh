@@ -1,5 +1,4 @@
 #!/bin/bash
-
 source installDependencies.sh
 
 # checking to see if docker exist

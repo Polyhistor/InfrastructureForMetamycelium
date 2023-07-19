@@ -297,7 +297,8 @@ resource "kubernetes_mutating_webhook_configuration_v1" "opa_istio_admission_con
   }
 
   depends_on = [
-    kubernetes_service.admission_controller
+    kubernetes_service.admission_controller,
+    kubernetes_deployment.admission_controller
   ]
 
 }

@@ -61,8 +61,9 @@ resource "helm_release" "node_temeletry_processor" {
       sidecar.istio.io/inject: "true"
     EOF
   ]
-}
 
+
+}
 
 resource "helm_release" "istio_base" {
   name  = "istio-base"
@@ -76,7 +77,7 @@ resource "helm_release" "istio_base" {
     value = "default"
   }
 
-  depends_on = [kubernetes_namespace.istio_system]
+
 }
 
 resource "helm_release" "istiod" {
@@ -87,7 +88,6 @@ resource "helm_release" "istiod" {
   namespace  = kubernetes_namespace.istio_system.metadata[0].name
   depends_on = [helm_release.istio_base]
 }
-
 
 resource "helm_release" "prometheus" {
   name       = "prometheus"
