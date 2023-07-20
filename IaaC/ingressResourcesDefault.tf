@@ -18,6 +18,17 @@ resource "kubernetes_ingress_v1" "keycloak_ingress" {
             }
           }
         }
+        path {
+          path = "/kafka"
+          backend {
+            service {
+              name = "mm-kafka"
+              port {
+                number = 9092
+              }
+            }
+          }
+        }
       }
     }
   }
