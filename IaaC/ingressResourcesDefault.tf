@@ -29,6 +29,18 @@ resource "kubernetes_ingress_v1" "keycloak_ingress" {
             }
           }
         }
+
+        path {
+          path = "/minio"
+          backend {
+            service {
+              name ="minio"
+              port {
+                number = 9000
+              }
+            }
+          }
+        }
       }
     }
   }

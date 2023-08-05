@@ -51,7 +51,7 @@ resource "helm_release" "vault" {
 
 resource "helm_release" "node_temeletry_processor" {
   name       = "mm-telemetry-processor"
-  repository = "https://polyhistor.github.io/helmChartsRepoForMetamycelium/nodejs-telemetry-processor-chart"
+  repository = "https://polyhistor.github.io/helmChartsRepoForMetamycelium/telemetry-processor-chart"
   chart      = "mm-telemetry-processor"
   namespace  = "istio-service-mesh"
 
@@ -82,9 +82,9 @@ resource "helm_release" "istio_base" {
 
 resource "helm_release" "istiod" {
   name  = "istiod"
-  chart = "istiod"
 
   repository = "https://istio-release.storage.googleapis.com/charts"
+  chart = "istiod"
   namespace  = kubernetes_namespace.istio_system.metadata[0].name
   depends_on = [helm_release.istio_base]
 }
