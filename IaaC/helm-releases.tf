@@ -51,7 +51,7 @@ resource "helm_release" "vault" {
 
 resource "helm_release" "node_temeletry_processor" {
   name       = "mm-telemetry-processor"
-  repository = "https://polyhistor.github.io/helmChartsRepoForMetamycelium/telemetry-processor-chart"
+  repository = "https://polyhistor.github.io/helmChartsAndApplicationsForMetamycelium/telemetry-processor-chart"
   chart      = "mm-telemetry-processor"
   namespace  = "istio-service-mesh"
 
@@ -146,6 +146,11 @@ resource "helm_release" "minio" {
   set {
     name  = "mode"
     value = "standalone"
+  }
+
+  set {
+    name  = "service.port"
+    value = "9001"
   }
 }
 
