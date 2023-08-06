@@ -1,2 +1,3 @@
 #!/bin/bash
 
+# TO BE WRITTEN AT THE END OF THE EXPERIMENT
