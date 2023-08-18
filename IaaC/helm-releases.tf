@@ -156,9 +156,10 @@ resource "helm_release" "minio" {
 
 
 resource "helm_release" "kafka_ui" {
-  name      = "helm-release-name"
-  chart     = "charts/kafka-ui"
-  namespace = "default"  # Adjust this if you have a specific namespace in mind
+  name       = "my-kafka-ui"
+  chart      = "kafka-ui/kafka-ui"
+  version    = "0.7.4"
+  namespace  = "default"
 
   set {
     name  = "yamlApplicationConfigConfigMap.name"
@@ -170,4 +171,6 @@ resource "helm_release" "kafka_ui" {
     value = "config.yml"
   }
 }
+
+
 

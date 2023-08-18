@@ -1,15 +1,20 @@
-resource "helm_release" "kafka_ui" {
-  name      = "helm-release-name"
-  chart     = "charts/kafka-ui"
-  namespace = "default"  # Adjust this if you have a specific namespace in mind
-
-  set {
-    name  = "yamlApplicationConfigConfigMap.name"
-    value = "kafka-ui-configmap"
+resource "kubernetes_config_map" "kafka_ui_configmap" {
+  metadata {
+    name = "kafka-ui-configmap"
   }
 
-  set {
-    name  = "yamlApplicationConfigConfigMap.keyName"
-    value = "config.yml"
+  data = {
+    "config.yml" = <<-EOT
+      kafka:
+        clusters:
+          - name: yaml
+            bootstrapServers: kafka-cluster-broker-endpoints:9092
+      auth:
+        type: disabled
+      management:
+        health:
+          ldap:
+            enabled: false
+    EOT
   }
 }
