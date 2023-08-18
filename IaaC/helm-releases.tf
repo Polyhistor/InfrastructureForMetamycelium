@@ -156,7 +156,7 @@ resource "helm_release" "minio" {
 
 
 resource "helm_release" "kafka_ui" {
-  name       = "my-kafka-ui"
+  name       = "kafka-ui"
   chart      = "kafka-ui/kafka-ui"
   version    = "0.7.4"
   namespace  = "default"

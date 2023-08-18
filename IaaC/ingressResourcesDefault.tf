@@ -8,6 +8,17 @@ resource "kubernetes_ingress_v1" "keycloak_ingress" {
       host = "localhost"
       http {
         path {
+          path= "/"
+          backend {
+            service {
+              name = "my-kafka-ui"
+              port {
+                number = 80
+              }
+            }
+          }
+        }
+        path {
           path = "/keycloak"
           backend {
             service {
