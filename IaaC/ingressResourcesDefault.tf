@@ -11,7 +11,7 @@ resource "kubernetes_ingress_v1" "keycloak_ingress" {
           path= "/"
           backend {
             service {
-              name = "my-kafka-ui"
+              name = "kafka-ui"
               port {
                 number = 80
               }

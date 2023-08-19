@@ -10,6 +10,7 @@ osInfo[/etc/gentoo-release]="emerge -ask"
 osInfo[/etc/SuSE-release]="zypper update && zypper install"
 osInfo[/etc/debian_version]="apt update && apt-get install"
 osInfo[/etc/alpine-release]="apk update && apk add"
+osInfo[/usr/bin/sw_vers]="brew install" # Added this line for macOS support
 
 determineOsPackageManager(){
     for f in ${!osInfo[@]}

@@ -166,7 +166,7 @@ resource "helm_release" "kafka_ui" {
     value = "kafka-ui-configmap"
   }
 
-  set {
+  set { 
     name  = "yamlApplicationConfigConfigMap.keyName"
     value = "config.yml"
   }
