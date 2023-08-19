@@ -173,4 +173,17 @@ resource "helm_release" "kafka_ui" {
 }
 
 
+resource "helm_release" "grafana" {
+  name       = "grafana"
+  # namespace  = "monitoring"  # adjust as needed
+  repository = "https://grafana.github.io/helm-charts"
+  chart      = "grafana"
 
+  # Set admin password and other values if required
+  set {
+    name  = "adminPassword"
+    value = "your_password_here"  # replace with your desired password
+  }
+
+  # Add additional configurations if required
+}
