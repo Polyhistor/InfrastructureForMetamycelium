@@ -95,6 +95,7 @@ resource "helm_release" "prometheus" {
   repository = "https://prometheus-community.github.io/helm-charts"
   namespace  = kubernetes_namespace.istio_system.metadata[0].name
 
+
   depends_on = [helm_release.istiod]
 }
 
