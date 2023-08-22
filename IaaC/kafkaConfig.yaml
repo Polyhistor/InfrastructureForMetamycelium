@@ -1,0 +1,2 @@
+config:
+  delete.topic.enable: "true"
